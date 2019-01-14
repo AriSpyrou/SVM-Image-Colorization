@@ -45,3 +45,5 @@ for x in range(4):
     else:
         channel = 0
 print(len(bins))
+
+# TODO not final
