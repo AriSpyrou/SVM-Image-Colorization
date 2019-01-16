@@ -1,15 +1,9 @@
-import matplotlib.pyplot as plt
-from skimage import io
-from skimage.segmentation import mark_boundaries
+import cv2
 from skimage.segmentation import slic
-from skimage.util import img_as_float
 
-# im = cv2.imread('castle.jpg')
-im = img_as_float(io.imread('castle.jpg'))
-segments = slic(im, 100, compactness=50, sigma=2)
-fig = plt.figure("SLIC Superpixels -- 100 segments")
-ax = fig.add_subplot(1, 1, 1)
-ax.imshow(mark_boundaries(im, segments))
-plt.axis("off")
-
-plt.show()
+im = cv2.imread('castle.jpg')
+im = cv2.cvtColor(im, cv2.COLOR_BGR2LAB)
+segments = slic(im, n_segments=50, convert2lab=True)
+surf = cv2.SURF(400)
+des = cv2.xfeatures2d_SURF.detect()
+print('ok')
