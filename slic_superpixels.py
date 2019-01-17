@@ -36,9 +36,10 @@ for seg in grp_segs:
     # For each point in segment
     for pt in seg:
         # Add keypoint to temp list of kps
-        kp_tmp.append(cv2.KeyPoint(pt[0], pt[1], 1))
+        kp_tmp.append(cv2.KeyPoint(pt[1], pt[0], 1))
     # Compute feature descriptors and put into temp array
     des_tmp = surf.compute(im, kp_tmp, None)
     # Find mean of feature descriptors effectively computing
     # a feature descriptor for each superpixel
     des.append(np.mean(des_tmp[1], axis=0))
+print('ok')
