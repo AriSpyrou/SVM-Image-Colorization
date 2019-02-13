@@ -3,7 +3,6 @@ import glob
 
 import cv2
 import numpy as np
-from joblib import dump
 from skimage.segmentation import slic
 from sklearn.decomposition import PCA
 from sklearn.metrics import pairwise_distances_argmin
@@ -13,7 +12,6 @@ from sklearn.svm import LinearSVC
 import colour_space_discretization as csd
 import gabor as gb
 
-LOAD_CLF = False
 N_SEG = 50
 SLIC_COMP = 10
 
@@ -35,10 +33,10 @@ def colorize(img, colors):
     return img
 
 
-def process_image(path, convert2lab=True, resize=True, quantize=True, return_luminance=False):
+def process_image(path, convert2lab=True, resize=True, quantize=True):
     # Load temp image
     tmp_img = cv2.imread(path)
-
+    im = tmp_img
     if resize:
         # Resize if too big
         if tmp_img.shape[1] >= 400:
@@ -63,13 +61,6 @@ def process_image(path, convert2lab=True, resize=True, quantize=True, return_lum
             for j in range(tmp_img.shape[1]):
                 tmp_img[i, j, 1:] = colormap[labels[label_idx]]
                 label_idx += 1
-    '''
-    sanity = cv2.cvtColor(tmp_img, cv2.COLOR_Lab2BGR)
-    cv2.imshow('i', sanity)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    cv2.imwrite('test.png', sanity)
-    '''
     return tmp_img
 
 
@@ -164,14 +155,12 @@ if __name__ == '__main__':
 
     y_train = pairwise_distances_argmin(colormap, np.asarray(y_train), axis=0)
     pca = PCA()
-    sc = StandardScaler(with_std=True)
+    sc = StandardScaler()
     X_train = pca.fit_transform(sc.fit_transform(X_train))
-    dump(pca, 'pca.joblib')
     X_test = pca.transform(sc.transform(X_test))
 
     lin_clf = LinearSVC(dual=False, fit_intercept=False)
     lin_clf.fit(X_train, y_train)
-    dump(lin_clf, 'linear_classifier.joblib')
 
     colors = lin_clf.predict(X_test)
     original = copy.copy(images_test[0])
