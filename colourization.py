@@ -167,6 +167,6 @@ if __name__ == '__main__':
     colorize(images_test[0], colors)
     results = np.concatenate((original, images_test[0]), axis=1)
     results = cv2.cvtColor(results, cv2.COLOR_Lab2BGR)
-    cv2.imshow('Original vs Colorized', results)
+    cv2.imshow('Original(left) and Colorized(right)', results)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

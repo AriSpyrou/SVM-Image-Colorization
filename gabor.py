@@ -17,14 +17,3 @@ def process(im, filters):
         fimg = cv2.filter2D(im, cv2.CV_8UC3, kern)
         np.maximum(accum, fimg, accum)
     return accum
-
-
-'''
-if __name__ == '__main__':
-    # Create filters with default settings
-    # and convert to ndarray
-    filters = build_filters()
-    # Read the image and init a feature vector
-    im = cv2.imread('castle.jpg', 0)
-    feat = []
-'''
